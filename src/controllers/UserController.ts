@@ -1,10 +1,86 @@
 import { Request, Response } from 'express';
 import { prismaClient } from '../database/primaClient';
-
+import { isEmailValid } from '../helpers/isEmailValid';
+import { verifyPassword } from '../helpers/verifyPassword';
 class UserController {
   async store(request: Request, response: Response){
     const { email, phone, fullname, username, password } = request.body;
 
+    if(!(email || phone)){
+      return response.status(400).json({error: 'Email ou Telefone é obrigatório'});
+    }
+    
+    if(email) {
+      const emailExists = await prismaClient.user.findUnique({
+        where:{
+          email
+        }
+      });
+      
+      if(emailExists) {
+        return response.status(409).json({error: 'Email já existente'}); 
+      }else {
+
+        //Verificar se é válido
+        if(!(await isEmailValid(email))){
+          return response.status(400).json({error: 'Email inválido'});
+        }
+      }
+    }else {
+
+      const phoneExists = await prismaClient.user.findUnique({
+        where:{
+          phone
+        }
+      });
+      
+      if(phoneExists) {
+        return response.status(409).json({error: 'Telefone já existente'}); 
+      }else {
+        console.log('verificar se é válido');
+      }
+
+    }
+    
+    if(!fullname){
+      return response.status(400).json({error: 'Nome completo é obrigatório'});
+    }
+
+    if(!username){
+      return response.status(400).json({error: 'Nome de usuário é obrigatório'});
+    }else {
+      const usernameExists = await prismaClient.user.findUnique({
+        where:{
+          username
+        }
+      });
+      
+      if(usernameExists) {
+        return response.status(409).json({error: 'Nome de usuário já existente'}); 
+      }else {
+        console.log('verificar se é válido');
+      }
+    }
+
+    if(!password){
+      return response.status(400).json({error: 'Senha é obrigatório'});
+    }
+    const verificationPassword = verifyPassword(password);
+    if(verificationPassword.strength != 'Forte'){
+      return response.status(400).json({error: verificationPassword});
+    }
+
+    const user = await prismaClient.user.create({
+      data: {
+        email: email || null,
+        phone: phone || null,
+        fullname,
+        username,
+        password
+      }
+    });
+
+    return response.json(user);
   }
 }
 

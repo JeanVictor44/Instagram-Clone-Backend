@@ -1,0 +1,4 @@
+Adicionar Repository Pattern
+Enviar email de verificação ao usuário com código
+
+https://www.abstractapi.com/guides/node-email-validation
