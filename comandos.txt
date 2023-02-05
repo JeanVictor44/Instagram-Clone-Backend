@@ -1,0 +1,2 @@
+yarn prisma init
+yarn prisma migrate dev -> Após criação dos models das tabelas rodar o comando para criar as migrations e executa-las
