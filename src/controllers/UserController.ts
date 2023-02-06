@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { prismaClient } from '../database/primaClient';
 import { isEmailValid } from '../helpers/isEmailValid';
 import { verifyPassword } from '../helpers/verifyPassword';
+import bcryptjs, { hash } from 'bcryptjs';
+
 class UserController {
   async store(request: Request, response: Response){
     const { email, phone, fullname, username, password } = request.body;
@@ -70,13 +72,15 @@ class UserController {
       return response.status(400).json({error: verificationPassword});
     }
 
+    const hashPassword = await hash(password,8);
+
     const user = await prismaClient.user.create({
       data: {
         email: email || null,
         phone: phone || null,
         fullname,
         username,
-        password
+        password: hashPassword
       }
     });
 
