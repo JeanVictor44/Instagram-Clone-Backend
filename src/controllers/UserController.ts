@@ -1,40 +1,33 @@
 import { Request, Response } from 'express';
-import { prismaClient } from '../database/primaClient';
 import { isEmailValid } from '../helpers/isEmailValid';
 import { verifyPassword } from '../helpers/verifyPassword';
 import { hash } from 'bcryptjs';
+import UsersRepository from '../repositories/UsersRepository';
 
 class UserController {
   async store(request: Request, response: Response){
     const { email, phone, fullname, username, password } = request.body;
+
+    // verificar se o usuário existe -> email, phone, username
+    
 
     if(!(email || phone)){
       return response.status(400).json({error: 'Email ou Telefone é obrigatório'});
     }
     
     if(email) {
-      const emailExists = await prismaClient.user.findUnique({
-        where:{
-          email
-        }
-      });
+      const emailExists = await UsersRepository.findUserByEmail(email);
       
       if(emailExists) {
         return response.status(409).json({error: 'Email já existente'}); 
       }else {
-
         //Verificar se é válido
         if(!(await isEmailValid(email))){
           return response.status(400).json({error: 'Email inválido'});
         }
       }
     }else {
-
-      const phoneExists = await prismaClient.user.findUnique({
-        where:{
-          phone
-        }
-      });
+      const phoneExists = await UsersRepository.findUserByPhone(phone);
       
       if(phoneExists) {
         return response.status(409).json({error: 'Telefone já existente'}); 
@@ -51,12 +44,8 @@ class UserController {
     if(!username){
       return response.status(400).json({error: 'Nome de usuário é obrigatório'});
     }else {
-      const usernameExists = await prismaClient.user.findUnique({
-        where:{
-          username
-        }
-      });
-      
+      const usernameExists = await UsersRepository.findUserByUsername(username);
+
       if(usernameExists) {
         return response.status(409).json({error: 'Nome de usuário já existente'}); 
       }else {
@@ -72,16 +61,14 @@ class UserController {
       return response.status(400).json({error: verificationPassword});
     }
 
-    const hashPassword = await hash(password,8);
+    const hashPassword = await hash(password, 8);
 
-    const user = await prismaClient.user.create({
-      data: {
-        email: email || null,
-        phone: phone || null,
-        fullname,
-        username,
-        password: hashPassword
-      }
+    const user = await UsersRepository.create({
+      email,
+      fullname,
+      password: hashPassword,
+      phone,
+      username
     });
 
     return response.json(user);
