@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { prismaClient } from '../database/primaClient';
 import { isEmailValid } from '../helpers/isEmailValid';
 import { verifyPassword } from '../helpers/verifyPassword';
-import bcryptjs, { hash } from 'bcryptjs';
+import { hash } from 'bcryptjs';
 
 class UserController {
   async store(request: Request, response: Response){
