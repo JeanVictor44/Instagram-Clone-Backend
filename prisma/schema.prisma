@@ -16,10 +16,12 @@ model User {
   phone String? @unique 
   fullname String
   username String @unique
+  bio String? @db.VarChar(150)
   profile_img_path String? 
   followers Int? @default(0)
   following Int? @default(0)
   password String
+  
   posts Post[]  
 
   @@map("users")
