@@ -6,7 +6,7 @@ export interface VerificationPassword {
 //Verificar individualmente maiúsculas e minúsculas
 
 export function verifyPassword(password: string):VerificationPassword {
-  if(password.length >= 8 && password.length <= 12){
+  if(password.length >= 8 && password.length <= 15){
     const numbers = /[0-9]/;
     const alphabet = /[a-z]/;
     const specialCharacters = /[~,!,@,#,$,%,^,&,*,-,_,+,=,?,>,<]/;

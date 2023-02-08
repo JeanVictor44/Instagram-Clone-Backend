@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { isEmailValid } from '../helpers/isEmailValid';
 import { verifyPassword } from '../helpers/verifyPassword';
-import { hash } from 'bcryptjs';
+import { compare, hash } from 'bcryptjs';
 import UsersRepository from '../repositories/UsersRepository';
+import { prismaClient } from '../database/primaClient';
 
 
 class UserController {
@@ -20,6 +21,39 @@ class UserController {
       username
     });
 
+  }
+
+  async updatePassword(request: Request, response: Response){
+    const { id } = request.params;
+    const { oldPassword, newPassword } = request.body;
+    
+    const user = await UsersRepository.findUserById(id);
+    if(!user){
+      return response.status(400).json({error: 'Usuário não encontrado'});
+    }
+
+    const isPasswordsMatch = await compare(oldPassword,user.password);
+    if(!isPasswordsMatch){
+      return response.status(400).json({error: 'Sua senha antiga foi inserida incorretamente.'});
+    }
+
+    const verificationPassword = verifyPassword(newPassword);
+    if(verificationPassword.strength != 'Forte'){
+      return response.status(400).json({error: verificationPassword});
+    }
+
+    const hashPassword = await hash(newPassword,8);
+
+    await prismaClient.user.update({
+      where: {
+        id
+      },
+      data: {
+        password: hashPassword
+      }
+    });
+    
+    return response.sendStatus(204);
   }
 
   async store(request: Request, response: Response){
