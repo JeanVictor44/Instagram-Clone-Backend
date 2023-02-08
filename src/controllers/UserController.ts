@@ -4,7 +4,24 @@ import { verifyPassword } from '../helpers/verifyPassword';
 import { hash } from 'bcryptjs';
 import UsersRepository from '../repositories/UsersRepository';
 
+
 class UserController {
+
+  async show(request: Request, response: Response){
+    const { id } = request.params;
+    const user = await UsersRepository.findUserById(id);
+    if(!user){
+      return response.status(400).json({error: 'Usuário não encontrado'});
+    }
+
+    const { fullname, username } = user;
+    return response.json({
+      fullname,
+      username
+    });
+
+  }
+
   async store(request: Request, response: Response){
     const { email, phone, fullname, username, password } = request.body;
 
@@ -73,6 +90,46 @@ class UserController {
 
     return response.json(user);
   }
+
+  async delete(request: Request, response: Response){
+    const { id } = request.params;
+    const user = await UsersRepository.findUserById(id);
+    if(!user) {
+      return response.status(400).json({error: 'Usuário não encontrado'});
+    }
+
+    await UsersRepository.delete(id);
+
+    return response.sendStatus(204);
+  }
+
+  async update(request: Request, response: Response){
+    const { id } = request.params;
+    const { email, phone, username, fullname } = request.body;
+
+    const user = await UsersRepository.findUserById(id);
+    if(!user){
+      return response.status(400).json({error: 'Usuário não encontrado'});
+    }
+    // Verificar se username, email e telefone já é usado
+
+
+    const userUpdateData = {
+      email: email || user.email, 
+      phone: phone || user.phone,
+      username: username || user.username,
+      fullname: fullname || user.fullname,
+      password: user.password
+    };
+
+    await UsersRepository.update(id, userUpdateData);
+    
+    return response.sendStatus(204);
+
+
+  }
+
+  
 }
 
 export default new UserController();
