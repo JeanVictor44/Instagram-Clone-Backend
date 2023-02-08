@@ -16,7 +16,25 @@ model User {
   phone String? @unique 
   fullname String
   username String @unique
-  password String 
+  profile_img_path String? 
+  followers Int? @default(0)
+  following Int? @default(0)
+  password String
+  posts Post[]  
 
   @@map("users")
+}
+
+model Post {
+  id String @id @default(uuid())
+  caption String?
+  location String? 
+  likes Int? @default(0)
+  post_img_path String 
+  
+  author  User? @relation(fields: [author_id], references: [id] )
+  author_id String?
+  
+  @@map("posts")
+
 }

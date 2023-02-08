@@ -52,12 +52,12 @@ class UserController {
         password: hashPassword
       }
     });
-    
+
     return response.sendStatus(204);
   }
 
   async store(request: Request, response: Response){
-    const { email, phone, fullname, username, password } = request.body;
+    const { email, phone, fullname, username, password} = request.body;
 
     // verificar se o usuário existe -> email, phone, username
     
@@ -114,12 +114,18 @@ class UserController {
 
     const hashPassword = await hash(password, 8);
 
+    const profile_img_path = request.file?.filename || null;
+    console.log(profile_img_path);
+    
     const user = await UsersRepository.create({
       email,
       fullname,
       password: hashPassword,
       phone,
-      username
+      username,
+      followers: 0,
+      following: 0,
+      profile_img_path
     });
 
     return response.json(user);
@@ -145,7 +151,7 @@ class UserController {
     if(!user){
       return response.status(400).json({error: 'Usuário não encontrado'});
     }
-    // Verificar se username, email e telefone já é usado
+    // Verificar se username, email e telefone já é usado / verificar email
 
 
     const userUpdateData = {
@@ -153,7 +159,10 @@ class UserController {
       phone: phone || user.phone,
       username: username || user.username,
       fullname: fullname || user.fullname,
-      password: user.password
+      password: user.password,
+      followers: user.followers,
+      following: user.following,
+      profile_img_path: user.profile_img_path
     };
 
     await UsersRepository.update(id, userUpdateData);
