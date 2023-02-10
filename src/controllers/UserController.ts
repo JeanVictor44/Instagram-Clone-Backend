@@ -10,20 +10,11 @@ class UserController {
 
   async show(request: Request, response: Response){
     const { id } = request.params;
-    const user = await UsersRepository.findUserById(id);
+    const user = await UsersRepository.findUserById(id, false);
     if(!user){
       return response.status(400).json({error: 'Usuário não encontrado'});
     }
-
-    const { fullname, username,followers, following, bio, profile_img_path} = user;
-    return response.json({
-      fullname, 
-      username,
-      followers,
-      following,
-      bio,
-      profile_img_path
-    });
+    return response.json(user);
 
   }
 
@@ -31,7 +22,7 @@ class UserController {
     const { id } = request.params;
     const { oldPassword, newPassword } = request.body;
     
-    const user = await UsersRepository.findUserById(id);
+    const user = await UsersRepository.findUserById(id, true);
     if(!user){
       return response.status(400).json({error: 'Usuário não encontrado'});
     }
@@ -137,7 +128,7 @@ class UserController {
 
   async delete(request: Request, response: Response){
     const { id } = request.params;
-    const user = await UsersRepository.findUserById(id);
+    const user = await UsersRepository.findUserById(id, false);
     if(!user) {
       return response.status(400).json({error: 'Usuário não encontrado'});
     }
@@ -151,7 +142,7 @@ class UserController {
     const { id } = request.params;
     const { email, phone, username, fullname, bio} = request.body;
 
-    const user = await UsersRepository.findUserById(id);
+    const user = await UsersRepository.findUserById(id, false);
     if(!user){
       return response.status(400).json({error: 'Usuário não encontrado'});
     }

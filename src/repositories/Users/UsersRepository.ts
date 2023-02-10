@@ -3,12 +3,20 @@ import { prismaClient } from '../../database/primaClient';
 import { IUsersRepository } from './IUsersRepsitory';
 
 class UsersRepository implements IUsersRepository{
-  findUserById(id: string){
+  findUserById(id: string, needPassword: boolean){
     return prismaClient.user.findUnique({
       where: {
         id
       },
-      include: {
+      select: {
+        email: true,
+        fullname: true,
+        username: true,
+        bio: true,
+        phone: true,
+        profile_img_path: true,
+        posts: true,
+        password: needPassword,
         followers: {
           orderBy: {
             following: {
@@ -30,9 +38,7 @@ class UsersRepository implements IUsersRepository{
           select: {
             follower: true
           },
-          
-
-        }
+        },
       },
 
       
