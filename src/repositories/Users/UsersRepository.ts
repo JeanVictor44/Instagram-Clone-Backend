@@ -1,5 +1,5 @@
-import { Prisma, User } from '@prisma/client';
-import { prismaClient } from '../database/primaClient';
+import {  User} from '@prisma/client';
+import { prismaClient } from '../../database/primaClient';
 import { IUsersRepository } from './IUsersRepsitory';
 
 class UsersRepository implements IUsersRepository{
@@ -7,13 +7,57 @@ class UsersRepository implements IUsersRepository{
     return prismaClient.user.findUnique({
       where: {
         id
-      }
+      },
+      include: {
+        followers: {
+          orderBy: {
+            following: {
+              username: 'asc',
+            },
+          },
+          select: {
+            following: true,
+            
+          }
+
+        },
+        following: {
+          orderBy: {
+            follower: {
+              username: 'asc'
+            } 
+          },
+          select: {
+            follower: true
+          },
+          
+
+        }
+      },
+
+      
+      
     });
   }
   
   create(user: Omit<User,'id'>){
     return prismaClient.user.create({
       data: user
+    });
+  }
+
+  follow(userId:string, followId: string){
+    return prismaClient.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        following: {
+          create: {
+            followerId: followId
+          }
+        }
+      }
     });
   }
   

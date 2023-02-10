@@ -18,15 +18,22 @@ model User {
   username String @unique
   bio String? @db.VarChar(150)
   profile_img_path String? 
-  followers Int? @default(0)
-  following Int? @default(0)
   password String
-  
+  followers Follow[] @relation("follower") 
+  following Follow[] @relation("following")
   posts Post[]  
 
   @@map("users")
 }
+model Follow {
+  follower User @relation("follower", fields: [followerId], references: [id])
+  followerId String
+  following User @relation("following", fields: [followingId], references: [id])
+  followingId String
 
+  @@id([followerId, followingId])
+  @@map("follows")
+}
 model Post {
   id String @id @default(uuid())
   caption String?

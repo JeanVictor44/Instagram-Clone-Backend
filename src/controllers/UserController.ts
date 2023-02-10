@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { isEmailValid } from '../helpers/isEmailValid';
 import { verifyPassword } from '../helpers/verifyPassword';
 import { compare, hash } from 'bcryptjs';
-import UsersRepository from '../repositories/UsersRepository';
+import UsersRepository from '../repositories/Users/UsersRepository';
 import { prismaClient } from '../database/primaClient';
 
 
@@ -15,10 +15,14 @@ class UserController {
       return response.status(400).json({error: 'Usuário não encontrado'});
     }
 
-    const { fullname, username } = user;
+    const { fullname, username,followers, following, bio, profile_img_path} = user;
     return response.json({
-      fullname,
-      username
+      fullname, 
+      username,
+      followers,
+      following,
+      bio,
+      profile_img_path
     });
 
   }
@@ -57,7 +61,7 @@ class UserController {
   }
 
   async store(request: Request, response: Response){
-    const { email, phone, fullname, username, password} = request.body;
+    const { email, phone, fullname, username, password, bio} = request.body;
 
     // verificar se o usuário existe -> email, phone, username
     
@@ -116,16 +120,16 @@ class UserController {
 
     const profile_img_path = request.file?.filename || null;
     console.log(profile_img_path);
-    
+
     const user = await UsersRepository.create({
       email,
       fullname,
       password: hashPassword,
       phone,
       username,
-      followers: 0,
-      following: 0,
-      profile_img_path
+      profile_img_path,
+      bio
+
     });
 
     return response.json(user);
@@ -145,7 +149,7 @@ class UserController {
 
   async update(request: Request, response: Response){
     const { id } = request.params;
-    const { email, phone, username, fullname } = request.body;
+    const { email, phone, username, fullname, bio} = request.body;
 
     const user = await UsersRepository.findUserById(id);
     if(!user){
@@ -153,23 +157,20 @@ class UserController {
     }
     // Verificar se username, email e telefone já é usado / verificar email
 
-
+    const profile_img_path = request.file?.filename || null;
     const userUpdateData = {
       email: email || user.email, 
       phone: phone || user.phone,
       username: username || user.username,
       fullname: fullname || user.fullname,
       password: user.password,
-      followers: user.followers,
-      following: user.following,
-      profile_img_path: user.profile_img_path
+      profile_img_path: profile_img_path || user.profile_img_path,
+      bio: bio || user.bio
     };
 
     await UsersRepository.update(id, userUpdateData);
     
     return response.sendStatus(204);
-
-
   }
 
   
