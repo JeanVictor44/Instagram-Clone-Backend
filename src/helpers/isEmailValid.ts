@@ -1,4 +1,4 @@
-import { AbstractAPI } from '../services/abstract';
+import { AbstractAPI } from '../api/abstract';
 
 interface AbstractAPI {
   deliverability: 'DELIVERABLE' | 'UNDELIVERABLE'
