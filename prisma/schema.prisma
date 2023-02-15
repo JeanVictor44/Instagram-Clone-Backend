@@ -34,6 +34,7 @@ model Follow {
   @@id([followerId, followingId])
   @@map("follows")
 }
+
 model Post {
   id String @id @default(uuid())
   caption String?
