@@ -15,7 +15,7 @@ app.use('/files', express.static(path.resolve(__dirname, '..', 'uploads')));
 
 app.use(authRoutes); 
 app.use(usersRoutes);
-app.use(postsRoutes);
+app.use('/posts',postsRoutes);
 app.use(followRoutes);
 
 app.listen(3333, () => {

@@ -1,5 +1,6 @@
-import { Post, Prisma } from '@prisma/client';
+import { Post } from '../../models/Post';
 
+export type ICreatePostDTO = Omit <Post, 'id'>
 export interface IPostsRepository {
-    create(post: Omit<Post,'id'>):Prisma.Prisma__PostClient<Post, never>;
+  create({author_id,caption,likes,location,post_img_path}: ICreatePostDTO):void
 }
