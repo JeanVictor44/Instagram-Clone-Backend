@@ -16,7 +16,6 @@ export function AuthMiddleware(
   if(!authorization){
     return response.status(401).json({error: 'Token not provided'});
   }
-
   const [,token] = authorization.split(' ');
 
   try {

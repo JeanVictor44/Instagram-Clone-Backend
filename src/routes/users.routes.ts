@@ -6,12 +6,13 @@ import { createUserController } from '../useCases/createUser';
 
 export const usersRoutes = Router();
 
-usersRoutes.post('/users', upload.single('image_path'), (request, response) => {
+usersRoutes.post('/', upload.single('image_path'), (request, response) => {
   return createUserController.handle(request, response);
 });
+
 usersRoutes.use(AuthMiddleware);
-usersRoutes.put('/users/:id',upload.single('image_path'), UserController.update);
-usersRoutes.patch('/users/:id/password/change', UserController.updatePassword);
-usersRoutes.get('/users/:id', UserController.show);
-usersRoutes.delete('/users/:id', UserController.delete);
+usersRoutes.put('/:id',upload.single('image_path'), UserController.update);
+usersRoutes.patch('/:id/password/change', UserController.updatePassword);
+usersRoutes.get('/:id', UserController.show);
+usersRoutes.delete('/:id', UserController.delete);
 

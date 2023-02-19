@@ -3,4 +3,4 @@ import AuthController from '../controllers/AuthController';
 
 export const authRoutes = Router();
 
-authRoutes.post('/auth', AuthController.authenticate);
+authRoutes.post('/', AuthController.authenticate);
