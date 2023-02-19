@@ -1,0 +1,66 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Instagram Clone API Documentation",
+        "description": "This is an API to clone the features of Instagram",
+        "version": "1.0.0",
+        "contact": {
+            "email": "jeanvictormachado3@gmail.com"
+        }
+    },
+    "paths": {
+        "/users": {
+            "post": {
+                "tags": ["User"],
+                "summary": "Create an User",
+                "description": "Create a new User",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data:": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id":{
+                                        "type": "string",
+                                        "format": "uuid",
+                                        "readOnly": true
+
+                                    },
+                                    "fullname": {
+                                        "type": "string"
+                                    },
+                                    "username": {
+                                        "type":"string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "phone": {
+                                        "type":"string"
+                                    },
+                                    "bio": {
+                                        "type": "string"
+                                    }
+                                    
+
+
+                                },
+                                "required": ["fullname", "username","email", "phone"]
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": ["User"]
+            },
+            "put": {
+                "tags": ["User"]
+            },
+            "delete": {
+                "tags": ["User"]
+            }
+        } 
+    }
+}
