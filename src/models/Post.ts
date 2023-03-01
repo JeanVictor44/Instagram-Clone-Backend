@@ -1,5 +1,5 @@
 import {v4 as uuidV4 } from 'uuid';
-class Post {
+class Post{
   id?: string;
   caption: string;
   location: string;

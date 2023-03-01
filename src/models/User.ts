@@ -1,6 +1,5 @@
 import {v4 as uuidV4 } from 'uuid';
-import { Follow } from './Follow';
-import { Post } from './Post';
+
 
 class User {
   id: string;   
@@ -11,10 +10,6 @@ class User {
   bio: string;
   profile_img_path?:string; 
   password: string;
-  
-  // followers?: Follow[]; 
-  // following?: Follow[];
-  // posts?: Post[];
 
   constructor(){
     if(!this.id){

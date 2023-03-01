@@ -7,7 +7,7 @@ class CreateUserUseCase {
     // Adicionar as regras de negócio
     const hashPassword = await bcrypt.hash(password, 8);
 
-    this.userRepository.create({bio, email, fullname, password: hashPassword, phone,profile_img_path,username});
+    await this.userRepository.create({bio, email, fullname, password: hashPassword, phone,profile_img_path,username});
   }
 }
 

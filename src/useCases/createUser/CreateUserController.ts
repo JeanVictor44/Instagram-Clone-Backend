@@ -3,11 +3,11 @@ import { CreateUserUseCase } from './CreateUserUseCase';
 
 class CreateUserController{
   constructor(private createUserUseCase: CreateUserUseCase){}
-  handle(request: Request, response: Response): Response{
+  async handle(request: Request, response: Response): Promise<Response>{
     const { email, phone, fullname, username, password, bio} = request.body;
     const profile_img_path = request.file?.filename || null;
 
-    this.createUserUseCase.execute({email, phone, fullname, username, password, bio,profile_img_path});
+    await this.createUserUseCase.execute({email, phone, fullname, username, password, bio,profile_img_path});
     return response.status(201).json();
   }
 }

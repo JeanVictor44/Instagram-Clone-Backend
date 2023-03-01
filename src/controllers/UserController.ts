@@ -22,7 +22,7 @@ class UserController {
     const { id } = request.params;
     const { oldPassword, newPassword } = request.body;
     
-    const user = await UsersRepository.findUserById(id, true);
+    const user = await UsersRepository.findUserById(id, true);    
     if(!user){
       return response.status(400).json({error: 'Usuário não encontrado'});
     }

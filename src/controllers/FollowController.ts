@@ -6,7 +6,7 @@ class FollowController {
     const { userId } = request;
     const { followId } = request.params;
 
-    const follow = await UsersRepository.findUserById(followId);
+    const follow = await UsersRepository.findUserById(followId,false);
     if(!follow){
       return response.status(400).json('Usuário a seguir não encontrado');
     }
