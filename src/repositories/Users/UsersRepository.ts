@@ -1,14 +1,15 @@
-import {  User} from '@prisma/client';
 import { prismaClient } from '../../database/primaClient';
 import { IUsersRepository } from './IUsersRepsitory';
+import { User } from '../../models/User';
 
 class UsersRepository implements IUsersRepository{
-  findUserById(id: string, needPassword: boolean){
-    return prismaClient.user.findUnique({
+  async findUserById(id: string, needPassword: boolean): Promise<User>{
+    const user = await prismaClient.user.findUnique({
       where: {
         id
       },
       select: {
+        id:true,
         email: true,
         fullname: true,
         username: true,
@@ -40,20 +41,18 @@ class UsersRepository implements IUsersRepository{
           },
         },
       },
-
-      
-      
     });
+    return user;
   }
   
-  async create(user: Omit<User,'id'>){
-    return await prismaClient.user.create({
+  async create(user: Omit<User,'id'>): Promise<void>{
+    await prismaClient.user.create({
       data: user
     });
   }
 
-  follow(userId:string, followId: string){
-    return prismaClient.user.update({
+  async follow(userId:string, followId: string): Promise<User>{
+    const user = await prismaClient.user.update({
       where: {
         id: userId
       },
@@ -65,10 +64,11 @@ class UsersRepository implements IUsersRepository{
         }
       }
     });
+    return user;
   }
   
-  update(id: string, userData: Omit<User,'id'>){
-    return prismaClient.user.update({
+  async update(id: string, userData: Omit<User,'id'>){
+    await prismaClient.user.update({
       where:{
         id
       },
@@ -76,37 +76,40 @@ class UsersRepository implements IUsersRepository{
     });
   }
 
-  delete(id: string){
-    return prismaClient.user.delete({
+  async delete(id: string){
+    await prismaClient.user.delete({
       where: {
         id
       }
     });
   }
 
-  findUserByEmail(email: string){
-    return prismaClient.user.findUnique({
+  async findUserByEmail(email: string){
+    const user = await prismaClient.user.findUnique({
       where:{
         email
       }
     });
+    return user;
   }
 
-  findUserByPhone(phone: string){
-    return prismaClient.user.findUnique({
+  async findUserByPhone(phone: string){
+    const user = await prismaClient.user.findUnique({
       where:{
         phone
       }
     });
+    return user;
 
   }
 
-  findUserByUsername(username: string){
-    return prismaClient.user.findUnique({
+  async findUserByUsername(username: string){
+    const user = await prismaClient.user.findUnique({
       where:{
         username
       }
     });
+    return user;
   }
 }
 

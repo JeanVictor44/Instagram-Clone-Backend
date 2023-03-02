@@ -27,6 +27,7 @@ class AuthController {
     const token = sign({id: user.id}, SECRET_KEY_WEB_TOKEN, {expiresIn: '1d'});
 
     const { id } = user;
+
     
     return response.json({user: {id, email},token});
   }

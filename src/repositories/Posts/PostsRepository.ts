@@ -13,4 +13,4 @@ class PostsRepository implements IPostsRepository{
   }
 
 }
-export { PostsRepository};
+export { PostsRepository };    

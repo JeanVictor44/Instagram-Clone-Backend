@@ -10,7 +10,8 @@ class User {
   bio: string;
   profile_img_path?:string; 
   password: string;
-
+  Followers?:User[];
+  Following?:User[];
   constructor(){
     if(!this.id){
       this.id = uuidV4();
