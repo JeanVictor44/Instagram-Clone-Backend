@@ -8,15 +8,6 @@ import { prismaClient } from '../database/primaClient';
 
 class UserController {
 
-  async show(request: Request, response: Response){
-    const { id } = request.params;
-    const user = await UsersRepository.findUserById(id, false);
-    if(!user){
-      return response.status(400).json({error: 'Usuário não encontrado'});
-    }
-    return response.json(user);
-
-  }
 
   async updatePassword(request: Request, response: Response){
     const { id } = request.params;
@@ -47,19 +38,6 @@ class UserController {
         password: hashPassword
       }
     });
-
-    return response.sendStatus(204);
-  }
-
-
-  async delete(request: Request, response: Response){
-    const { id } = request.params;
-    const user = await UsersRepository.findUserById(id, false);
-    if(!user) {
-      return response.status(400).json({error: 'Usuário não encontrado'});
-    }
-
-    await UsersRepository.delete(id);
 
     return response.sendStatus(204);
   }
