@@ -13,4 +13,5 @@ export interface IUsersRepository {
     findUserByPhone(phone: string):Promise<User>;
     findUserByUsername(username: string):Promise<User>;
     follow(userId: string,followId:string): Promise<User>
+    updatePassword(id: string, password: string): Promise<void>
 }

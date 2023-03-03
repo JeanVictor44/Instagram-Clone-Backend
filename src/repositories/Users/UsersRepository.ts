@@ -76,6 +76,17 @@ class UsersRepository implements IUsersRepository{
     });
   }
 
+  async updatePassword(id: string, password: string): Promise<void> {
+    await prismaClient.user.update({
+      where: {
+        id
+      },
+      data: {
+        password: password
+      }
+    });
+  }
+
   async delete(id: string){
     await prismaClient.user.delete({
       where: {

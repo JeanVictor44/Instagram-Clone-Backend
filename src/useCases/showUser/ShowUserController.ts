@@ -1,4 +1,4 @@
-import { Request,  Response } from 'express';
+import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { ShowUserUseCase } from './ShowUserUseCase';
 
