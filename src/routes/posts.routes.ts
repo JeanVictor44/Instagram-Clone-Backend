@@ -4,6 +4,4 @@ import { createPostController } from '../useCases/createPost';
 
 export const postsRoutes = Router();
 
-postsRoutes.post('/',upload.single('image_path'), (request, response) => {
-  return createPostController.handle(request,response);
-});
+postsRoutes.post('/',upload.single('image_path'), createPostController.handle);
