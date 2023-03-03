@@ -2,9 +2,11 @@ import { Router } from 'express';
 import UserController from '../controllers/UserController';
 import { AuthMiddleware } from '../middlewares/auth';
 import { upload } from '../services/multer';
-import { createUserController } from '../useCases/createUser';
+import { CreateUserController } from '../useCases/createUser/CreateUserController';
 
 export const usersRoutes = Router();
+
+const createUserController = new CreateUserController();
 
 usersRoutes.post('/', upload.single('image_path'), createUserController.handle);
 
