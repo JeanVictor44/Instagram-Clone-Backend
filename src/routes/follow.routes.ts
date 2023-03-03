@@ -1,8 +1,10 @@
 import { Router } from 'express';
-import FollowController from '../controllers/FollowController';
 import { AuthMiddleware } from '../middlewares/auth';
+import { FolloUserController } from '../useCases/followUser/FollowUserController';
 
 export const followRoutes = Router();
 
 followRoutes.use(AuthMiddleware);
-followRoutes.post('/:followId', FollowController.follow);
+const followUserController = new FolloUserController();
+
+followRoutes.post('/:followId', followUserController.handle);
