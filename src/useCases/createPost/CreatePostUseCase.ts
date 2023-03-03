@@ -1,3 +1,4 @@
+import { inject, injectable } from 'tsyringe';
 import { IPostsRepository } from '../../repositories/Posts/IPostsRepository';
 
 interface IRequest {
@@ -8,8 +9,12 @@ interface IRequest {
   author_id: string;
 }
 
+@injectable()
 class CreatePostUseCase {
-  constructor(private postsRepository: IPostsRepository){}
+  constructor(
+    @inject('PostsRepository')
+    private postsRepository: IPostsRepository
+  ){}
 
   execute({author_id,caption,likes,location,post_img_path}: IRequest){
     if(!post_img_path) {

@@ -1,10 +1,16 @@
 import bcrypt from 'bcryptjs';
+import { inject, injectable } from 'tsyringe';
 import { isEmailValid } from '../../helpers/isEmailValid';
 import { verifyPassword } from '../../helpers/verifyPassword';
 import { ICreateUserDTO, IUsersRepository } from '../../repositories/Users/IUsersRepsitory';
 
+@injectable()
 class CreateUserUseCase {
-  constructor(private usersRepository: IUsersRepository){}
+  
+  constructor(
+    @inject('UsersRepository')  
+    private usersRepository: IUsersRepository
+  ){}
   async execute({bio,email,fullname,password,phone,profile_img_path,username}: ICreateUserDTO){
 
     if(!(email || phone)){

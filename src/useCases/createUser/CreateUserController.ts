@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { container } from 'tsyringe';
 import { CreateUserUseCase } from './CreateUserUseCase';
 
 class CreateUserController{
@@ -7,7 +8,9 @@ class CreateUserController{
     const { email, phone, fullname, username, password, bio} = request.body;
     const profile_img_path = request.file?.filename || null;
 
-    await this.createUserUseCase.execute({email, phone, fullname, username, password, bio,profile_img_path});
+    const createUserUseCase = container.resolve(CreateUserUseCase);
+
+    await createUserUseCase.execute({email, phone, fullname, username, password, bio,profile_img_path});
     return response.status(201).json();
   }
 }

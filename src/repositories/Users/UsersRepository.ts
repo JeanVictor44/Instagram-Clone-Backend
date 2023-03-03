@@ -113,4 +113,4 @@ class UsersRepository implements IUsersRepository{
   }
 }
 
-export default new UsersRepository();
+export { UsersRepository };
