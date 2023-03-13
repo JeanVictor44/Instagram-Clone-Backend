@@ -11,7 +11,7 @@ class CreateUserUseCase {
     @inject('UsersRepository')  
     private usersRepository: IUsersRepository
   ){}
-  
+
   async execute({bio,email,fullname,password,phone,profile_img_path,username}: ICreateUserDTO){
 
     if(!(email || phone)){
@@ -19,7 +19,7 @@ class CreateUserUseCase {
     }
     
     if(email) {
-      const emailExists = this.usersRepository.findUserByEmail(email);
+      const emailExists = await this.usersRepository.findUserByEmail(email);
       
       if(emailExists) {
         throw new Error('Email já existente'); 
