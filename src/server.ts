@@ -1,11 +1,11 @@
 import express from 'express';
 import path from 'node:path';
+import 'reflect-metadata';
 import { routes } from './routes';
 import swaggerUi from 'swagger-ui-express';
 import swaggerFile from './swagger.json'; 
-
 require('dotenv').config();
-
+import './shared/containers';
 const app = express();
 
 app.use(express.json());
